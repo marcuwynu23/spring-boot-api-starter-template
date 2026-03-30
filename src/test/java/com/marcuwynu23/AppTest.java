@@ -40,6 +40,15 @@ class AppTest {
             .andExpect(content().contentTypeCompatibleWith("application/json"))
             .andExpect(jsonPath("$.name").value("spring-boot-api-starter"))
             .andExpect(jsonPath("$.status").value("running"))
-            .andExpect(jsonPath("$.health").value("/api/health"));
+            .andExpect(jsonPath("$.health").value("/api/health"))
+            .andExpect(jsonPath("$.sampleItems").value("/api/items"));
+    }
+
+    @Test
+    void itemsEndpointReturnsArray() throws Exception {
+        mockMvc.perform(get("/api/items"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith("application/json"))
+            .andExpect(jsonPath("$").isArray());
     }
 }
