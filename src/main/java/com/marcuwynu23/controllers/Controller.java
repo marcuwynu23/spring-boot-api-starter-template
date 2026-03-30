@@ -11,29 +11,27 @@ import com.marcuwynu23.models.SampleItem;
 import com.marcuwynu23.repositories.SampleItemRepository;
 
 @RestController
-public class MyController {
+public class Controller {
     private final SampleItemRepository sampleItemRepository;
 
-    public MyController(SampleItemRepository sampleItemRepository) {
+    public Controller(SampleItemRepository sampleItemRepository) {
         this.sampleItemRepository = sampleItemRepository;
     }
 
     @GetMapping("/")
     public Map<String, Object> root() {
         return Map.of(
-            "name", "spring-boot-api-starter",
-            "status", "running",
-            "health", "/api/health",
-            "sampleItems", "/api/items"
-        );
+                "name", "spring-boot-api-starter",
+                "status", "running",
+                "health", "/api/health",
+                "sampleItems", "/api/items");
     }
 
     @GetMapping("/api/health")
     public Map<String, Object> health() {
         return Map.of(
-            "status", "ok",
-            "timestamp", Instant.now().toString()
-        );
+                "status", "ok",
+                "timestamp", Instant.now().toString());
     }
 
     @GetMapping("/api/items")
