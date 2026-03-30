@@ -8,9 +8,9 @@ ORM (Object-Relational Mapping) maps Java classes to database tables so you can 
 
 In this template:
 
-- Entity: `src/main/java/com/marcuwynu23/models/SampleItem.java`
-- Repository: `src/main/java/com/marcuwynu23/repositories/SampleItemRepository.java`
-- API usage: `src/main/java/com/marcuwynu23/controllers/MyController.java`
+- Entity: `src/main/java/com/marcuwynu23/models/TodoItem.java`
+- Repository: `src/main/java/com/marcuwynu23/repositories/TodoItemRepository.java`
+- API usage: `src/main/java/com/marcuwynu23/controllers/TodoController.java`
 - DB config: `src/main/resources/application.properties`
 
 ## Core Flow
@@ -23,7 +23,7 @@ In this template:
 
 ## Entity Example
 
-`SampleItem` is mapped to table `sample_items`:
+`TodoItem` is mapped to table `todo_items`:
 
 - `@Entity`
 - `@Table(name = "sample_items")`
@@ -31,10 +31,10 @@ In this template:
 
 ## Repository Example
 
-`SampleItemRepository` extends:
+`TodoItemRepository` extends:
 
 ```java
-JpaRepository<SampleItem, Long>
+JpaRepository<TodoItem, Long>
 ```
 
 Built-in methods:
@@ -47,8 +47,21 @@ Built-in methods:
 You can add custom methods by naming convention, e.g.:
 
 ```java
-List<SampleItem> findByName(String name);
+List<TodoItem> findByCompleted(boolean completed);
 ```
+
+## Todo CRUD ORM Mapping
+
+The current Todo API endpoints are backed by `TodoItemRepository`:
+
+- `GET /api/todos` -> `findAll()`
+- `GET /api/todos/{id}` -> `findById(id)`
+- `POST /api/todos` -> `save(todo)`
+- `PUT /api/todos/{id}` -> `save(existing)`
+- `PATCH /api/todos/{id}/toggle` -> `save(existing)`
+- `DELETE /api/todos/{id}` -> `deleteById(id)`
+
+This gives a full CRUD flow using Spring Data JPA with minimal boilerplate.
 
 ## Default Database (SQLite)
 
@@ -145,5 +158,5 @@ Test endpoints:
 ```bash
 curl http://localhost:8080/
 curl http://localhost:8080/api/health
-curl http://localhost:8080/api/items
+curl http://localhost:8080/api/todos
 ```
