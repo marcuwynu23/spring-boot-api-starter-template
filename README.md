@@ -52,58 +52,17 @@ curl http://localhost:8080/api/health
 curl http://localhost:8080/api/items
 ```
 
-## ORM and Database Configuration
+## ORM and Database
 
-This template ships with Spring Data JPA and supports multiple SQL variants.
+ORM and database configuration were moved to:
 
-Default configuration uses SQLite (file-based) for quick local startup:
+- `docs/ORM.md`
 
-- `spring.datasource.url=jdbc:sqlite:./data/app.db`
-- `spring.jpa.hibernate.ddl-auto=update`
-- `spring.jpa.database-platform=org.hibernate.community.dialect.SQLiteDialect`
+## Middleware Setup
 
-### SQLite Notes
+Middleware patterns and common setup were moved to:
 
-- Database file is created at `./data/app.db` on first run.
-- If needed, remove the `data/` folder to reset local data.
-
-### Switch to PostgreSQL
-
-Use environment variables when running:
-
-```bash
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/appdb
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=postgres
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-```
-
-### Switch to MySQL
-
-```bash
-SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/appdb
-SPRING_DATASOURCE_USERNAME=root
-SPRING_DATASOURCE_PASSWORD=secret
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-```
-
-### Switch to MariaDB
-
-```bash
-SPRING_DATASOURCE_URL=jdbc:mariadb://localhost:3306/appdb
-SPRING_DATASOURCE_USERNAME=root
-SPRING_DATASOURCE_PASSWORD=secret
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-```
-
-### Switch to SQL Server
-
-```bash
-SPRING_DATASOURCE_URL=jdbc:sqlserver://localhost:1433;databaseName=appdb;encrypt=false
-SPRING_DATASOURCE_USERNAME=sa
-SPRING_DATASOURCE_PASSWORD=YourStrong!Passw0rd
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-```
+- `docs/MIDDLEWARES.md`
 
 ## Development Workflow
 
