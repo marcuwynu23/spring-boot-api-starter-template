@@ -1,7 +1,6 @@
 # Spring Boot API Starter Template
 
-Production-ready starter template for building REST APIs with Spring Boot.  
-This project is API-only (no server-side views/templates) and includes a test baseline for rapid feature development.
+Production-ready starter template for building REST APIs with Spring Boot.
 
 ## Highlights
 
