@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,29 +38,29 @@ class AppTest {
     @Test
     void healthEndpointReturnsExpectedContract() throws Exception {
         mockMvc.perform(get("/api/health"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith("application/json"))
-            .andExpect(jsonPath("$.status").value("ok"))
-            .andExpect(jsonPath("$.timestamp").value(not(emptyOrNullString())));
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("application/json"))
+                .andExpect(jsonPath("$.status").value("ok"))
+                .andExpect(jsonPath("$.timestamp").value(not(emptyOrNullString())));
     }
 
     @Test
     void rootEndpointReturnsStarterInfo() throws Exception {
         mockMvc.perform(get("/"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith("application/json"))
-            .andExpect(jsonPath("$.name").value("spring-boot-api-starter"))
-            .andExpect(jsonPath("$.status").value("running"))
-            .andExpect(jsonPath("$.health").value("/api/health"))
-            .andExpect(jsonPath("$.todos").value("/api/todos"));
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("application/json"))
+                .andExpect(jsonPath("$.name").value("spring-boot-api-starter"))
+                .andExpect(jsonPath("$.status").value("running"))
+                .andExpect(jsonPath("$.health").value("/api/health"))
+                .andExpect(jsonPath("$.todos").value("/api/todos"));
     }
 
     @Test
     void todosEndpointReturnsArray() throws Exception {
         mockMvc.perform(get("/api/todos"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith("application/json"))
-            .andExpect(jsonPath("$").isArray());
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("application/json"))
+                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
@@ -68,40 +69,40 @@ class AppTest {
         String created = mockMvc.perform(post("/api/todos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(createPayload))
-            .andExpect(status().isCreated())
-            .andExpect(content().contentTypeCompatibleWith("application/json"))
-            .andExpect(jsonPath("$.id").exists())
-            .andExpect(jsonPath("$.title").value("Write integration test"))
-            .andExpect(jsonPath("$.completed").value(false))
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
+                .andExpect(status().isCreated())
+                .andExpect(content().contentTypeCompatibleWith("application/json"))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.title").value("Write integration test"))
+                .andExpect(jsonPath("$.completed").value(false))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
         Long id = objectMapper.readTree(created).get("id").asLong();
 
         mockMvc.perform(get("/api/todos/" + id))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(id))
-            .andExpect(jsonPath("$.title").value("Write integration test"))
-            .andExpect(jsonPath("$.completed").value(false));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.title").value("Write integration test"))
+                .andExpect(jsonPath("$.completed").value(false));
 
         String updatePayload = "{\"title\":\"Write integration test (updated)\",\"completed\":true}";
         mockMvc.perform(put("/api/todos/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatePayload))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.title").value("Write integration test (updated)"))
-            .andExpect(jsonPath("$.completed").value(true));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Write integration test (updated)"))
+                .andExpect(jsonPath("$.completed").value(true));
 
         mockMvc.perform(patch("/api/todos/" + id + "/toggle"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.completed", is(false)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.completed", is(false)));
 
         mockMvc.perform(delete("/api/todos/" + id))
-            .andExpect(status().isNoContent())
-            .andExpect(header().string("Content-Length", "0"));
+                .andExpect(status().isNoContent())
+                .andExpect(header().string("Content-Length", nullValue()));
 
         mockMvc.perform(get("/api/todos/" + id))
-            .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound());
     }
 }
