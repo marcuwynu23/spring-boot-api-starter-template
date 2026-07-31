@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.marcuwynu23.models.TodoItem;
 import com.marcuwynu23.services.TodoService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+
 // REST controller exposing starter metadata, health, and Todo CRUD endpoints.
 @RestController
 public class TodoController {
@@ -57,12 +60,12 @@ public class TodoController {
 
     @PostMapping("/api/todos")
     @ResponseStatus(HttpStatus.CREATED)
-    public TodoItem createTodo(@RequestBody TodoRequest request) {
+    public TodoItem createTodo(@Valid @RequestBody TodoRequest request) {
         return todoService.create(request.getTitle(), request.isCompleted());
     }
 
     @PutMapping("/api/todos/{id}")
-    public TodoItem updateTodo(@PathVariable Long id, @RequestBody TodoRequest request) {
+    public TodoItem updateTodo(@PathVariable Long id, @Valid @RequestBody TodoRequest request) {
         return todoService.update(id, request.getTitle(), request.isCompleted());
     }
 
@@ -78,6 +81,7 @@ public class TodoController {
     }
 
     public static class TodoRequest {
+        @NotBlank(message = "title must not be blank")
         private String title;
 
         private boolean completed;
