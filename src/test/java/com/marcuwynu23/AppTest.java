@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,7 +98,7 @@ class AppTest {
 
         mockMvc.perform(delete("/api/todos/" + id))
             .andExpect(status().isNoContent())
-            .andExpect(header().string("Content-Length", "0"));
+            .andExpect(content().string(""));
 
         mockMvc.perform(get("/api/todos/" + id))
             .andExpect(status().isNotFound());
