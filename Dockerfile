@@ -5,13 +5,14 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn -B -DskipTests clean package
+RUN mvn -B -DskipTests clean package \
+    && cp /app/target/*.jar /app/app.jar
 
 FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
-COPY --from=builder /app/target/spring-boot-api-starter-template-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/app.jar app.jar
 
 EXPOSE 8080
 
