@@ -144,6 +144,46 @@ curl http://localhost:8080/api/health
 curl http://localhost:8080/api/items
 ```
 
+## Run with Docker Compose
+
+Spins up the app plus PostgreSQL with a persistent volume and a DB healthcheck.
+
+```bash
+# Copy and adjust defaults if needed
+cp .env.example .env
+
+docker compose up -d --build
+```
+
+Environment overrides (in `.env` or as compose substitutions):
+
+| Variable          | Default      | Purpose                    |
+| ----------------- | ------------ | -------------------------- |
+| `APP_PORT`        | `8080`       | Host port for the API      |
+| `DB_PORT`         | `5432`       | Host port for PostgreSQL   |
+| `POSTGRES_DB`     | `appdb`      | Database name              |
+| `POSTGRES_USER`   | `app`        | Database user              |
+| `POSTGRES_PASSWORD` | `appsecret` | Database password        |
+
+Stop the stack and remove containers/network (data volume is preserved):
+
+```bash
+docker compose down
+```
+
+Reset all data, including the volume:
+
+```bash
+docker compose down -v
+```
+
+Verify:
+
+```bash
+curl http://localhost:8080/api/health
+curl http://localhost:8080/api/todos
+```
+
 ## Project Structure
 
 ```text
