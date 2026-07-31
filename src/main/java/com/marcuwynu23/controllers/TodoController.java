@@ -14,18 +14,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.marcuwynu23.models.TodoItem;
-import com.marcuwynu23.repositories.TodoItemRepository;
+import com.marcuwynu23.services.TodoService;
 
 // REST controller exposing starter metadata, health, and Todo CRUD endpoints.
 @RestController
 public class TodoController {
-    private final TodoItemRepository todoItemRepository;
+    private final TodoService todoService;
 
-    public TodoController(TodoItemRepository todoItemRepository) {
-        this.todoItemRepository = todoItemRepository;
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
     }
 
     // Root endpoint to quickly verify the API is running.
@@ -48,52 +47,39 @@ public class TodoController {
 
     @GetMapping("/api/todos")
     public List<TodoItem> listTodos() {
-        return todoItemRepository.findAll();
+        return todoService.findAll();
     }
 
     @GetMapping("/api/todos/{id}")
     public TodoItem getTodo(@PathVariable Long id) {
-        return todoItemRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+        return todoService.findById(id);
     }
 
     @PostMapping("/api/todos")
     @ResponseStatus(HttpStatus.CREATED)
     public TodoItem createTodo(@RequestBody TodoRequest request) {
-        TodoItem todo = new TodoItem(request.getTitle(), request.isCompleted());
-        return todoItemRepository.save(todo);
+        return todoService.create(request.getTitle(), request.isCompleted());
     }
 
     @PutMapping("/api/todos/{id}")
     public TodoItem updateTodo(@PathVariable Long id, @RequestBody TodoRequest request) {
-        TodoItem existing = todoItemRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
-
-        existing.setTitle(request.getTitle());
-        existing.setCompleted(request.isCompleted());
-        return todoItemRepository.save(existing);
+        return todoService.update(id, request.getTitle(), request.isCompleted());
     }
 
     @PatchMapping("/api/todos/{id}/toggle")
     public TodoItem toggleTodo(@PathVariable Long id) {
-        TodoItem existing = todoItemRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
-
-        existing.setCompleted(!existing.isCompleted());
-        return todoItemRepository.save(existing);
+        return todoService.toggle(id);
     }
 
     @DeleteMapping("/api/todos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTodo(@PathVariable Long id) {
-        if (!todoItemRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found");
-        }
-        todoItemRepository.deleteById(id);
+        todoService.delete(id);
     }
 
     public static class TodoRequest {
         private String title;
+
         private boolean completed;
 
         public TodoRequest() {
