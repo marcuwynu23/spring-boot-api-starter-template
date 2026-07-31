@@ -1,7 +1,7 @@
 # Spring Boot API Starter - Makefile
 
 APP_NAME := spring-boot-api-starter-template
-VERSION := 0.0.1-SNAPSHOT
+VERSION := 1.0.0
 JAR := target/$(APP_NAME)-$(VERSION).jar
 MAVEN := mvn
 DOCKER_IMAGE := $(APP_NAME):latest

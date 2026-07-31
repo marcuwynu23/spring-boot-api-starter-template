@@ -96,12 +96,12 @@ mvn clean package
 
 Generated artifact:
 
-- `target/spring-boot-api-starter-template-0.0.1-SNAPSHOT.jar`
+- `target/spring-boot-api-starter-template-1.0.0.jar`
 
 ### Run release artifact
 
 ```bash
-java -jar target/spring-boot-api-starter-template-0.0.1-SNAPSHOT.jar
+java -jar target/spring-boot-api-starter-template-1.0.0.jar
 ```
 
 ## Run with Containers
